@@ -1,0 +1,21 @@
+# runs source over an entire dir looking for *.bash files and sources them
+function massource() {
+  if [ ! -d $1 ]; then
+    echo "no dir - $1"
+    exit 0
+  fi
+  for bashscript in `ls -1Ap $1|grep '^[^.]*\.bash$'`
+  do
+    source $1$bashscript
+  done
+}
+
+alias massresource="source $HOME/.massource"
+
+# now massource some directories
+if [[ -d $HOME/.profile.d/ ]]; then
+  massource $HOME/.profile.d/
+fi
+if [[ -d $HOME/.bash_completion.d/ ]]; then
+  massource $HOME/.bash_completion.d/
+fi
