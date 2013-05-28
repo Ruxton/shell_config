@@ -22,7 +22,7 @@ PS2="more=> ";
 
 export PS1
 export PS2
-BUNDLER_EDITOR=mate
+BUNDLER_EDITOR=subl
 export BUNDLER_EDITOR
 
 if [ -f /usr/local/etc/bash_completion ]; then

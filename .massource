@@ -16,6 +16,9 @@ alias massresource="source $HOME/.massource"
 if [[ -d $HOME/.profile.d/ ]]; then
   massource $HOME/.profile.d/
 fi
+if [[ -d $HOME/.profile.d/private/ ]]; then
+  massource $HOME/.profile.d/private/
+fi
 if [[ -d $HOME/.bash_completion.d/ ]]; then
   massource $HOME/.bash_completion.d/
 fi
