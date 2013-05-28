@@ -1,2 +1,3 @@
 private/
 shell_config.private
+.profile.d/private
