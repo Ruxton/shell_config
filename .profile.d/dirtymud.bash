@@ -1,1 +1,0 @@
-/Users/ruxton/shell_config/private/.profile.d/dirtymud.bash
