@@ -1,8 +1,14 @@
 #ENV sh
 
+SHELL_CONFIG_IS_OSX=false
+
 ## Manage calls to True Crypt
 unamestr=`uname`
 if [[ "$unamestr" == 'Darwin' ]]; then
+  SHELL_CONFIG_IS_OSX = true
+fi
+
+if SHELL_CONFIG_IS_OSX; then
   truecrypt='/Applications/TrueCrypt.app/Contents/MacOS/Truecrypt --text'
 else
   truecrypt='truecrypt'
