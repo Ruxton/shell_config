@@ -1,4 +1,4 @@
-#ENV sh
+#!/usr/bin/env sh
 
 SHELL_CONFIG_IS_OSX=false
 
@@ -14,17 +14,9 @@ else
   truecrypt='truecrypt'
 fi
 
-## Shell Config variables
+## Source default config
 SHELL_CONFIG_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-SHELL_CONFIG_HOMEDIR_LINKS=".profile.d .rspec .massource .hgignore_global .gitignore_global .gitconfig .gemrc .bashrc .bash_profile"
-SHELL_CONFIG_SUBLIME_PREFS="Preferences.sublime-settings"
-if [[ "$unamestr" == 'Darwin' ]]; then
-  SHELL_CONFIG_SUBLIME_DIR="$HOME/Library/Application Support/Sublime Text 2/Packages/User"
-else
-  SHELL_CONFIG_SUBLIME_DIR="$HOME/Library/Application Support/Sublime Text 2/Packages/User"
-fi
-SHELL_CONFIG_PRIVATE_TCVOLUME="$HOME/DropBox/shell_config.private"
-
+. $SHELL_CONFIG_DIR/config/default
 
 function shell_config_usage() {
   cat <<-EOF
@@ -39,7 +31,6 @@ EOF
 }
 
 function shell_config_install() {
-  local CONFIG_FILES DIR
   echo "$(tput bold)Installing Shell Config$(tput sgr0)"
   shell_config_link_homedir $SHELL_CONFIG_DIR
   shell_config_link_sublime_prefs $SHELL_CONFIG_DIR
@@ -49,9 +40,7 @@ function shell_config_install() {
 }
 
 function shell_config_uninstall() {
-  local CONFIG_FILES DIR
   echo "$(tput bold)Uninstalling Shell Config$(tput sgr0)"
-  DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
   shell_config_unlink_homedir
   shell_config_unlink_sublime_prefs
   shell_config_uninstall_private
@@ -161,14 +150,14 @@ function shell_config_link() {
   fi
 }
 
+## Executions option, defaults to install
 if [ $# -lt 1 ]; then
   shell_config_install
-  exit 1;
+else
+  case "$1" in
+    install)                  shell_config_install;;
+    uninstall)                shell_config_uninstall;;
+    usage|help|--help|-h|/?)  shell_config_usage;;
+    mountprivate)             shell_config_mount_private;;
+  esac
 fi
-
-case "$1" in
-  install)                  shell_config_install;;
-  uninstall)                shell_config_uninstall;;
-  usage|help|--help|-h|/?)  shell_config_usage;;
-  mountprivate)             shell_config_mount_private;;
-esac
