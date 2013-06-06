@@ -30,9 +30,10 @@ function shell_config_usage() {
   cat <<-EOF
 $(tput bold)usage:$(tput sgr0) ./install.sh [action]
 
-install:   Installs and links configuration files (default action)
-uninstall: Uninstalls and removes the configuration files
-usage:     Display this message
+install:      Installs and links configuration files (default action)
+mountprivate: Mounts the private directory, useful after you've rebooted
+uninstall:    Uninstalls and removes the configuration files
+usage:        Display this message
 EOF
   return 0
 }
@@ -67,8 +68,7 @@ function shell_config_install_private() {
     		echo "Private volume does not exist, linking it.."
 	      shell_config_link $SHELL_CONFIG_PRIVATE_TCVOLUME $SHELL_CONFIG_DIR/$SHELL_CONFIG_PRIVATE_FILE
     	fi
-      echo "Mounting private dir from True Crypt"
-      $truecrypt $SHELL_CONFIG_DIR/$SHELL_CONFIG_PRIVATE_FILE $SHELL_CONFIG_PRIVATE_DIR
+      shell_config_mount_private
     fi
 
     if [[ -f "${SHELL_CONFIG_DIR}/private/install.shell_config" ]]; then
@@ -89,6 +89,11 @@ function shell_config_uninstall_private() {
      	shell_config_unlink $SHELL_CONFIG_DIR/$SHELL_CONFIG_PRIVATE_FILE
     fi
   fi
+}
+
+function shell_config_mount_private() {
+  echo "Mounting private dir from True Crypt"
+  $truecrypt $SHELL_CONFIG_DIR/$SHELL_CONFIG_PRIVATE_FILE $SHELL_CONFIG_PRIVATE_DIR
 }
 
 function shell_config_link_homedir() {
@@ -165,4 +170,5 @@ case "$1" in
   install)                  shell_config_install;;
   uninstall)                shell_config_uninstall;;
   usage|help|--help|-h|/?)  shell_config_usage;;
+  mountprivate)             shell_config_mount_private;;
 esac
