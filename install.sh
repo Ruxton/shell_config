@@ -5,10 +5,10 @@ SHELL_CONFIG_IS_OSX=false
 ## Manage calls to True Crypt
 unamestr=`uname`
 if [[ "$unamestr" == 'Darwin' ]]; then
-  SHELL_CONFIG_IS_OSX = true
+  SHELL_CONFIG_IS_OSX=true
 fi
 
-if SHELL_CONFIG_IS_OSX; then
+if [[ $SHELL_CONFIG_IS_OSX == true ]]; then
   truecrypt='/Applications/TrueCrypt.app/Contents/MacOS/Truecrypt --text'
 else
   truecrypt='truecrypt'
@@ -82,6 +82,10 @@ function shell_config_uninstall_private() {
 
 function shell_config_mount_private() {
   echo "Mounting private dir from True Crypt"
+  SHELL_CONFIG_PRIVATE_DIR="$SHELL_CONFIG_DIR/private"
+
+  SHELL_CONFIG_PRIVATE_FILE=`basename $SHELL_CONFIG_PRIVATE_TCVOLUME`
+
   $truecrypt $SHELL_CONFIG_DIR/$SHELL_CONFIG_PRIVATE_FILE $SHELL_CONFIG_PRIVATE_DIR
 }
 
