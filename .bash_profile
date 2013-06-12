@@ -3,7 +3,7 @@ export LSCOLORS=DxGxcxdxCxegedabagacad
 
 source ~/.massource
 
-PATH=$PATH:~/bin:/phonegap/lib:/usr/local/sbin
+PATH=$PATH:~/bin:/phonegap/lib:/usr/local/sbin:/usr/local/share/npm/bin
 export PATH
 
 M2_HOME=/usr/share/maven
