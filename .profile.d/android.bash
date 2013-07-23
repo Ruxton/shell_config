@@ -1,3 +1,17 @@
+function icon_copy() {
+  local icon=$1
+  res_path="/Users/ruxton/Work/android/Vu-Android/VuMusic/res"
+  local resource_folders="ldpi mdpi hdpi xhdpi"
+  echo "Looking for ${icon}.."
+
+  for res in $resource_folders; do
+    local uc_res=`echo $res|tr '[a-z]' '[A-Z]'`
+    echo "Copying $uc_res to $res"
+    cp $uc_res/$1.png $res_path/drawable-$res/$1.png
+  done
+
+}
+
 # droid: (deploy/compile/run) Deploy, compile or run android projects with maven
 function droid() {
 
@@ -45,7 +59,7 @@ function testflightup() {
 Usage: testflightup [options]
 
 OPTIONS:
-    --help                  See this message 
+    --help                  See this message
     --notify                Notify users in the default distribution list of the new version
     --note <notes>          Set the note to be set for the build
     --distribution <list>   A comma seperated list of valid distribution lists ie. "Android,Android The Place"
@@ -62,7 +76,7 @@ EOF
                       ;;
     esac
     shift
-  done  
+  done
 
 
   __apk_selector
@@ -75,7 +89,7 @@ EOF
 
   current_date=`date`
   default_notes="Deployed $current_date"
- 
+
   if [ "${inNotes+defined}" ]; then
     default_notes=$inNotes
   fi
@@ -83,7 +97,7 @@ EOF
   read -ep "Deploy notes (default $default_notes): " notes;
   notes=${notes:-$default_notes}
 
-  curl http://testflightapp.com/api/builds.json \
+  curl https://testflightapp.com/api/builds.json \
     -F file=@target/$selected_apk \
     -F api_token=$TESTFLIGHT_API_TOKEN \
     -F team_token=$TESTFLIGHT_TEAM_TOKEN \
@@ -98,11 +112,11 @@ function __apk_selector() {
     local prompt="Please select an apk"
   else
     local prompt=$1
-  fi  
+  fi
 
   local most_recent_apk=`ls target/*.apk | xargs -n1 basename | tail -n 1`
   local apk_list=`ls target/*.apk | xargs -n1 basename`
 
-  __selector "${prompt}" "selected_apk" "" "${apk_list}"  
+  __selector "${prompt}" "selected_apk" "" "${apk_list}"
 
 }

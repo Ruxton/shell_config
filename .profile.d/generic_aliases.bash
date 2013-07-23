@@ -118,3 +118,67 @@ function __selector() {
     return 0
   fi
 }
+
+osx_real_path () {
+  OIFS=$IFS
+  IFS='/'
+  for I in $1
+  do
+    # Resolve relative path punctuation.
+    if [ "$I" = "." ] || [ -z "$I" ]
+      then continue
+    elif [ "$I" = ".." ]
+      then FOO="${FOO%%/${FOO##*/}}"
+           continue
+      else FOO="${FOO}/${I}"
+    fi
+
+    # Dereference symbolic links.
+    if [ -h "$FOO" ] && [ -x "/bin/ls" ]
+      then IFS=$OIFS
+           set `/bin/ls -l "$FOO"`
+           while shift ;
+           do
+             if [ "$1" = "->" ]
+               then FOO=$2
+                    shift $#
+                    break
+             fi
+           done
+    fi
+  done
+  IFS=$OIFS
+  echo "$FOO"
+}
+
+# __screend: screen daemonizing
+__screend() {
+  local name="${1}"
+  local check=`screen -list|grep ${name}|awk '{print $1}'`
+
+  if [[ "$2" = "" ]]; then
+    if [[ "${check}" = "" ]]; then
+      echo "Starting ${name}..."
+      screen -dmS ${name} bash -c '${name}'
+      local runCheck=`screen -list|grep ${name}|awk '{print $1}'`
+      if [[ "${runCheck}" = "" ]]; then
+        echo "Unable to start ${name} in background"
+      else
+        echo "Started ${name} in background"
+      fi
+    else
+      echo "${name} is running in background..."
+      read -ep "re-attach? (y/n)" choice
+      if [[ $choice = [yY] ]]; then
+        echo "Attaching ${name} session..."
+        screen -r ${check}
+      else
+        echo "${name} currently running at ${check}"
+      fi
+    fi
+  else
+    if [[ $2 -eq "load" ]]; then
+      screen -r ${name}
+    fi
+  fi
+}

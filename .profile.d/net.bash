@@ -32,3 +32,17 @@ function remknownhost {
   [[ -z ${LINE} ]] && { echo "Nothing to clean"; return 0; }
   sed -i -n "$LINE!p" ~/.ssh/known_hosts
 }
+
+function ssl_sni_check() {
+  H=$1
+  non_sni=`echo '' | openssl s_client -showcerts -connect $H:443 </dev/null | sed -n -e '/BEGIN\ CERTIFICATE/,/END\ CERTIFICATE/ p'`
+  with_sni=`echo '' | openssl s_client -showcerts -connect $H:443 -servername $H </dev/null | sed -n -e '/BEGIN\ CERTIFICATE/,/END\ CERTIFICATE/ p'`
+
+  if [[ "$non_sni" == "$with_sni" ]]; then
+    echo "Does not use SNI"
+    return 1
+  else
+    echo "Server uses SNI"
+    return 0
+  fi
+}

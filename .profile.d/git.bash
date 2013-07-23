@@ -35,6 +35,9 @@ alias gstat="git status"
 # gtwf: Git WTF is a repo/remote status tool
 alias gwtf="git wtf"
 
+# gsl: A list of who contributed how much to a git repo
+alias gsl="git shortlog -nsw -e"
+
 # gprefixes: Count occurence of all prefixes
 gprefixes() {
   git slg | grep -o '^\[[A-Z]*\]'| awk '{count[$1]++}END{for(j in count) print j,"("count[j]")"}'
@@ -236,4 +239,11 @@ bananajourd() {
       screen -r bananajour
     fi
   fi
+}
+
+# gourcemake: Make a gource video in the current directory, convert to x264
+gource_make() {
+  gource_options=$*
+  gravatars
+  gource -s 0.5 -1280x720 --user-image-dir .git/avatar/ $gource_options -o - | ffmpeg -y -r 60 -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset slow -pix_fmt yuv420p -crf 15 -strict 2 -bf 0 gource.mp4
 }
