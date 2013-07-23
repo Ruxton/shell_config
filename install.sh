@@ -154,6 +154,20 @@ function shell_config_link() {
   fi
 }
 
+function shell_config_copy() {
+  from=$1
+  to=$2
+
+  if [[ -d $from ]] || [[ -f $from ]]; then
+    echo "$(tput setaf 2)Copying ${from} to ${to}$(tput sgr0)"
+    cp -rf $from $to
+  else
+    echo "$(tput setaf 1)$from does not exit, unable to copy to $to$(tput sgr0)"
+    return 0
+  fi
+
+}
+
 ## Executions option, defaults to install
 if [ $# -lt 1 ]; then
   shell_config_install
