@@ -55,6 +55,30 @@ function abspath() {
   echo $return
 }
 
+# user_confirm: Confirm with a string in $1
+function user_confirm() {
+  local REPLY msg
+  msg=$1
+  read -ep "$msg (y/n):" -n 1
+  echo
+  if [[ $REPLY =~ ^[Yy]$ ]]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+# read_with_defaults: $1=prompt $2=default $3=variable to set
+function read_with_defaults() {
+  local return_var
+  prompt=$1
+  default=$2
+
+  read -e -p "$prompt [$default]: " return_var
+  return_var=${return_var:-$default}
+  eval $3=\$return_var
+}
+
 brewcompletion_path="/usr/local/etc/bash_completion.d/"
 
 function brewcompletion() {

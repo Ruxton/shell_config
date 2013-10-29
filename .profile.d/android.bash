@@ -1,3 +1,17 @@
+function demu() {
+  avd="$1"
+  if [[ "$avd" == "" ]]; then
+    avd="Nexus-4.2.2"
+  fi
+
+  emulator -avd ${avd} -scale 0.5 & > /dev/null
+}
+
+# createkeystore: $1=keystore_file $2=alias
+function createkeystore() {
+  keytool -genkey -v -keystore $1 -alias $2 -keyalg RSA -keysize 2048 -validity 10000
+}
+
 function icon_copy() {
   local icon=$1
   res_path="/Users/ruxton/Work/android/Vu-Android/VuMusic/res"

@@ -43,6 +43,18 @@ gprefixes() {
   git slg | grep -o '^\[[A-Z]*\]'| awk '{count[$1]++}END{for(j in count) print j,"("count[j]")"}'
 }
 
+git_joined_committers_caption() {
+  authors=`git log --no-merges --format='%aN' | sort -u`
+  OLD_IFS=$IFS
+  IFS=$(echo -en "\n\b")
+  author_list=""
+  for author in $authors; do
+    author_first_commit=`git log --author="${author}" --pretty=format:%H|tail -1`
+    author_list+="$(git log -1 --format='%ct|%an started comitting' $author_first_commit)\n"
+  done
+  IFS=$OLD_IFS
+  echo -en $author_list|sort -u
+}
 
 # gupstream: set upstream of current branch to origin/<branch_name>
 gupstream() {
@@ -58,6 +70,22 @@ gremote() {
   git pull
 }
 
+# gco: git checkout with grep support
+gco() {
+  local branch_pre=".*/"
+  local find_branch=""
+
+  if [ "$1" != "" ]; then
+    find_branch=`git branch 2>/dev/null | grep -m 1 "${branch_pre}${1}.*" | awk '{ print $1 }'`
+  fi
+
+  if [ "$find_branch" == "" ]; then
+    git checkout $*
+  else
+    git checkout $find_branch
+  fi
+}
+
 # gpushremote: push current local branch to origin
 gpushremote() {
   current_branch=`git branch | grep "*" | awk '{ print $2 }'`
@@ -66,7 +94,7 @@ gpushremote() {
 
 # gpushsmeg: push current local branch to smeghead
 gpushsmeg() {
-  current_branch=`git branch | grep "*" | awk '{ print $2 }'`
+  current_branch=`git branch | grep "*" | awk '{ print $1 }'`
   git push smeghead $current_branch
 }
 
@@ -244,6 +272,31 @@ bananajourd() {
 # gourcemake: Make a gource video in the current directory, convert to x264
 gource_make() {
   gource_options=$*
+  google_cl_available=`hash google 2>/dev/null`
+  filename=`basename $PWD`
+
+  # Fetch gravatars for committers
   gravatars
-  gource -s 0.5 -1280x720 --user-image-dir .git/avatar/ $gource_options -o - | ffmpeg -y -r 60 -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset slow -pix_fmt yuv420p -crf 15 -strict 2 -bf 0 gource.mp4
+
+  git_joined_committers_caption > committers.log
+  # Output tag log for captions
+  for tag in `git tag`; do git log -1 --pretty=format:"%at|Releasing $tag%n" $tag; done > tag.log
+  # Combine into captions
+  cat committers.log tag.log | sort > captions.log
+  rm committers.log
+  rm tag.log
+
+  gource -s 0.5 -1280x720 --user-image-dir .git/avatar/ --date-format "%Y-%m-%d %H:%M:%S" --hide progress,mouse,filenames --caption-file captions.log --caption-duration 2.0 $gource_options -o - | ffmpeg -y -r 60 -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset slow -pix_fmt yuv420p -crf 15 -strict 2 -bf 0 $filename.mp4
+  rm captions.log
+
+
+  if $google_cl_available; then
+    read -p "Upload to YouTube?" -n 1 -r
+    echo    # (optional) move to a new line
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+      google youtube post --access "Unlisted" --category "Tech" $filename.mp4
+    fi
+  fi
+
 }
