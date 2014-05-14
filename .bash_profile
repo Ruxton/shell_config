@@ -12,6 +12,9 @@ export M2_HOME
 ANDROID_HOME=/usr/local/Cellar/android-sdk/r21.1
 export ANDROID_HOME
 
+GOPATH=~/AppsByGreg/go
+export GOPATH
+
 # Show the time you entered the command in history log
 export HISTTIMEFORMAT='%Y-%b-%d %a %H:%M:%S - '
 
