@@ -1,6 +1,6 @@
 # tunnel: SSH Tunnel bound to local ip, used for remote desktop hopping through linux gateways, eg. tunnel localport remotehost:port remotehost
 function tunnel {
-  ssh -L $1:$2 $@ ;
+  ssh -f -N -L $1:$2 ${*:3};
 }
 
 # header: get the header of the given url
@@ -16,7 +16,7 @@ alias scpresume="rsync --partial --progress --rsh=ssh"
 
 # authme: Copy public key to remote host SSH
 function authme {
-  ssh $1 'cat >>.ssh/authorized_keys2' < ~/.ssh/id_rsa.pub
+  ssh $1 'if [[ ! -d ~/.ssh ]]; then mkdir -p ~/.ssh/; fi; cat >>.ssh/authorized_keys; chmod 600 ~/.ssh/authorized_keys' < ~/.ssh/id_rsa.pub
 }
 
 # privme: Copy private key to remote host SSH
