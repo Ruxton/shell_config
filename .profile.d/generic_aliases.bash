@@ -34,6 +34,8 @@ alias cd..="cd ../.."
 # cd...: Three directory levels above the current dir
 alias cd...="cd ../../.."
 
+alias subl="atom"
+
 # cpbak: quickly copy/backup a directory
 cpbak() {
   local dirname basename
