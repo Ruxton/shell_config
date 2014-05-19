@@ -7,6 +7,7 @@ aenv_path="/Users/ruxton/AppsByGreg/android/"
 menv_path="/Users/ruxton/AppsByGreg/mobile/"
 xenv_path="/Users/ruxton/AppsByGreg/xbmc/"
 senv_path="/Users/ruxton/AppsByGreg/shell/"
+goenv_path="/Users/ruxton/AppsByGreg/go/src/"
 
 # wrenv: Change directory into work ruby environment
 function wrenv() { cd $wrenv_path$@ ;}
@@ -22,10 +23,12 @@ function penv() { cd $penv_path$@ ;}
 function aenv() { cd $aenv_path$@ ;}
 # menv: Change directory to Mobile environment
 function menv() { cd $menv_path$@ ;}
-# xenv: Change directory XBMC environment
+# xenv: Change directory to XBMC dev environment
 function xenv() { cd $xenv_path$@ ;}
-# xenv: Change directory SHELL dev environment
+# xenv: Change directory to SHELL dev environment
 function senv() { cd $senv_path$@ ;}
+# goenv: Change directory to personal GoLang dev environment
+function goenv() { cd $goenv_path$@ ;}
 
 # drop: Copy $1 to share through /Users/ruxton/Sites/drop/
 drop() {
@@ -99,4 +102,4 @@ function _bash_complete_dirlister() {
   fi
 }
 
-complete -F _bash_complete_dirlister wrenv renv aenv penv wpenv menv xenv waenv senv
+complete -F _bash_complete_dirlister wrenv renv aenv penv wpenv menv xenv waenv senv goenv
