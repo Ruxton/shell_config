@@ -300,3 +300,14 @@ gource_make() {
   fi
 
 }
+
+# git_patches: Generate patches between current branch and $1
+git_patches() {
+  commits=`git log --format="%H" $1... --`
+  num=1
+  for COMMIT in $commits
+  do
+    git format-patch -1 $COMMIT --start-number=$num
+    num=$(($num+1))
+  done
+}
