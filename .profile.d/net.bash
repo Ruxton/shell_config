@@ -11,6 +11,11 @@ function cors() {
   curl -I -H 'Origin: $1'
 }
 
+# digall: dig DNS for all records
+function digall() {
+  dig +nocmd $1 any +multiline +noall +answer
+}
+
 # scpresume: rsync over ssh with resume
 alias scpresume="rsync --partial --progress --rsh=ssh"
 
@@ -31,6 +36,11 @@ function remknownhost {
   LINE=`ssh -o StrictHostKeyChecking=yes $1 'exit' 2>&1 | sed -n '/Offending key/ { s/.*://;s/r//;p }'`
   [[ -z ${LINE} ]] && { echo "Nothing to clean"; return 0; }
   sed -i -n "$LINE!p" ~/.ssh/known_hosts
+}
+
+# ssl_csr_gen: Generate SSL Certificate CSR
+function ssl_genkey() {
+  openssl genrsa 2048 > $1.key
 }
 
 function ssl_sni_check() {
