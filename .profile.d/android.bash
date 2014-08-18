@@ -1,3 +1,27 @@
+function droidshot() {
+  local formatter="%03d"
+  local file="$1"
+  local n=1
+  local fn=$(printf "${formatter}" $n)
+
+  if [[ "$file" == "" ]]; then
+    file="droidshot-"$(date "+%d-%m-%Y-")
+    files=`ls ${file}* 2>/dev/null|awk '{print $1}'`
+    ext=".png"
+
+    for i in $files; do
+      if [[ "${file}${fn}${ext}" == "${i}" ]]; then
+        n=$(( n + 1 ))
+      fi
+      fn=$(printf "${formatter}" $n)
+    done
+
+    file="${file}${fn}${ext}"
+  fi
+  echo "Screenshotting to ${file}.."
+  adb shell screencap -p 2> /dev/null | perl -pe 's/\x0D\x0A/\x0A/g' > $file
+}
+
 function demu() {
   avd="$1"
   if [[ "$avd" == "" ]]; then
@@ -10,6 +34,21 @@ function demu() {
 # createkeystore: $1=keystore_file $2=alias
 function createkeystore() {
   keytool -genkey -v -keystore $1 -alias $2 -keyalg RSA -keysize 2048 -validity 10000
+}
+
+function generate_fb_keyhash() {
+  if [[ "$1" == "" ]]; then
+    key_alias="androiddebugkey"
+  else
+    key_alias=$1
+  fi
+
+  if [[ "$2" == "" ]]; then
+    key_store="~/.android/debug.keystore"
+  else
+    key_store=$2
+  fi
+  keytool -exportcert -alias androiddebugkey -keystore ~/.android/debug.keystore | openssl sha1 -binary | openssl base64
 }
 
 function icon_copy() {
