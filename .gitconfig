@@ -5,7 +5,6 @@
   lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
   clg = log --pretty=format:'%x25li %s' --date=short --no-merges
   slg = log --pretty=format:'%s' --no-merges
-  pr = "!f() { if [ \"$2\" != \"\" ]; then remote=$2; else remote=\"origin\"; fi; git fetch $remote refs/pull/$1/head:pr/$1; git checkout pr/$1; } ; f"
 [core]
 	excludesfile = /Users/ruxton/.gitignore_global
 [color]
