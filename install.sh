@@ -33,7 +33,6 @@ EOF
 function shell_config_install() {
   echo "$(tput bold)Installing Shell Config$(tput sgr0)"
   shell_config_link_homedir $SHELL_CONFIG_DIR
-  shell_config_link_sublime_prefs $SHELL_CONFIG_DIR
   shell_config_install_private
   source $HOME/.massource
   echo "$(tput setaf 2)Success.$(tput sgr0)"
@@ -42,7 +41,6 @@ function shell_config_install() {
 function shell_config_uninstall() {
   echo "$(tput bold)Uninstalling Shell Config$(tput sgr0)"
   shell_config_unlink_homedir
-  shell_config_unlink_sublime_prefs
   shell_config_uninstall_private
   echo "$(tput setaf 2)Success.$(tput sgr0)"
 }
@@ -104,25 +102,6 @@ function shell_config_unlink_homedir() {
 	echo "$(tput bold)Unlinking home directory...$(tput sgr0)"
   for file in $SHELL_CONFIG_HOMEDIR_LINKS; do
     link=$HOME/$file
-    shell_config_unlink "$link"
-  done
-}
-
-function shell_config_link_sublime_prefs() {
-	echo "$(tput bold)Linking sublime prefs...$(tput sgr0)"
-  local SUBLIME_PREFS DIR SUBLIME_DIR from to
-  DIR=$1
-  for file in $SHELL_CONFIG_SUBLIME_PREFS; do
-    from=$DIR/subl/$file
-    to=$SHELL_CONFIG_SUBLIME_DIR/$file
-    shell_config_link "$from" "$to"
-  done
-}
-
-function shell_config_unlink_sublime_prefs() {
-	echo "$(tput bold)Unlinking sublime prefs...$(tput sgr0)"
-  for file in $SHELL_CONFIG_SUBLIME_PREFS; do
-    link=$SHELL_CONFIG_SUBLIME_DIR/$file
     shell_config_unlink "$link"
   done
 }
