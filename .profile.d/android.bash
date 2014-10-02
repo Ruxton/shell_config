@@ -51,16 +51,17 @@ function generate_fb_keyhash() {
   keytool -exportcert -alias androiddebugkey -keystore ~/.android/debug.keystore | openssl sha1 -binary | openssl base64
 }
 
+
+# droid_icon_copy: $icon_name $target
 function icon_copy() {
   local icon=$1
-  res_path="/Users/ruxton/Work/android/Vu-Android/VuMusic/res"
-  local resource_folders="ldpi mdpi hdpi xhdpi"
+  local resource_folders="mdpi hdpi xhdpi xxhdpi"
   echo "Looking for ${icon}.."
 
   for res in $resource_folders; do
     local uc_res=`echo $res|tr '[a-z]' '[A-Z]'`
     echo "Copying $uc_res to $res"
-    cp $uc_res/$1.png $res_path/drawable-$res/$1.png
+    cp $uc_res/$1.png $2/drawable-$res/$1.png
   done
 
 }
@@ -94,25 +95,38 @@ compile: Compile android project with maven (mvn clean install)
 
 # build_droid_icons: SVG 2 PNG at Droid Sizes
 function build_droid_icons() {
-  ICON_SIZES=(xxhdpi xhdpi hdpi mdpi ldpi)
+  ICON_SIZES=(xxhdpi xhdpi hdpi mdpi)
+
+  if [[ "$1" == "" ]]; then
+    INPUT_DIR="."
+  else
+    INPUT_DIR=$1
+  fi
+
+  if [[ "$2" == "" ]]; then
+    OUTPUT_DIR=$INPUT_DIR
+  else
+    OUTPUT_DIR=$2
+  fi
+
   for (( i = 0; i < ${#ICON_SIZES[@]}; i++ )); do
     size=${ICON_SIZES[$i]}
-    path="${1}/res/drawable-${size}"
+    path="${OUTPUT_DIR}/res/drawable-${size}"
     echo "Creating directory ${path}"
     mkdir -p $path
   done
   ## Setup folders
 
 
-  for f in $(find $1 -name "*.svg" -type f); do
+  for f in $(find ${INPUT_DIR} -name "*.svg" -type f); do
     echo "Processing $f"
-    process_droid_icon $f $1
+    process_droid_icon $f ${OUTPUT_DIR}
   done
 }
 
 function process_droid_icon {
-  ICON_SIZES=(xxhdpi xhdpi hdpi mdpi ldpi)
-  ICON_DPI=(100 90 67.5 45 33.75)
+  ICON_SIZES=(xxhdpi xhdpi hdpi mdpi)
+  ICON_DPI=(360 180 133.75 90)
   inkscape="/Applications/Inkscape.app/Contents/Resources/bin/inkscape -z"
   file=$(basename $1)
 
