@@ -92,6 +92,40 @@ compile: Compile android project with maven (mvn clean install)
   fi
 }
 
+# build_droid_icons: SVG 2 PNG at Droid Sizes
+function build_droid_icons() {
+  ICON_SIZES=(xxhdpi xhdpi hdpi mdpi ldpi)
+  for (( i = 0; i < ${#ICON_SIZES[@]}; i++ )); do
+    size=${ICON_SIZES[$i]}
+    path="${1}/res/drawable-${size}"
+    echo "Creating directory ${path}"
+    mkdir -p $path
+  done
+  ## Setup folders
+
+
+  for f in $(find $1 -name "*.svg" -type f); do
+    echo "Processing $f"
+    process_droid_icon $f $1
+  done
+}
+
+function process_droid_icon {
+  ICON_SIZES=(xxhdpi xhdpi hdpi mdpi ldpi)
+  ICON_DPI=(100 90 67.5 45 33.75)
+  inkscape="/Applications/Inkscape.app/Contents/Resources/bin/inkscape -z"
+  file=$(basename $1)
+
+  filename="${file/.svg}.png"
+
+  for (( i = 0; i < ${#ICON_SIZES[@]}; i++ )); do
+    echo "Processing ${ICON_SIZES[$i]}..."
+    path="$2/res/drawable-${ICON_SIZES[$i]}"
+
+    $inkscape -d ${ICON_DPI[$i]} -e $path/$filename $1 >& /dev/null
+  done
+}
+
 # adbrestart: restart Android Debug Bridge
 function adbrestart() {
   $ANDROID_HOME/platform-tools/adb kill-server
