@@ -8,7 +8,7 @@ alias debugme="touch tmp/debug.txt"
 function rgm() {
   local fileopener file
 
-  fileopener='subl'
+  fileopener='atom'
   file=`rails g migration $@ | grep "create" | awk '{print $3}'`
 
   # open migration in netbeans

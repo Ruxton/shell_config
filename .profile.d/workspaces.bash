@@ -8,6 +8,7 @@ menv_path="/Users/ruxton/AppsByGreg/mobile/"
 xenv_path="/Users/ruxton/AppsByGreg/xbmc/"
 senv_path="/Users/ruxton/AppsByGreg/shell/"
 goenv_path="/Users/ruxton/AppsByGreg/go/src/"
+wjenv_path="/Users/ruxton/Work/java/"
 
 # wrenv: Change directory into work ruby environment
 function wrenv() { cd $wrenv_path$@ ;}
@@ -29,6 +30,8 @@ function xenv() { cd $xenv_path$@ ;}
 function senv() { cd $senv_path$@ ;}
 # goenv: Change directory to personal GoLang dev environment
 function goenv() { cd $goenv_path$@ ;}
+# wjenv: Change directory to Work Java dev environment
+function wjenv() { cd $wjenv_path$@ ;}
 
 # drop: Copy $1 to share through /Users/ruxton/Sites/drop/
 drop() {
@@ -102,4 +105,4 @@ function _bash_complete_dirlister() {
   fi
 }
 
-complete -F _bash_complete_dirlister wrenv renv aenv penv wpenv menv xenv waenv senv goenv
+complete -F _bash_complete_dirlister wrenv renv aenv penv wpenv menv xenv waenv senv goenv wjenv

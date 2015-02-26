@@ -269,7 +269,7 @@ bananajourd() {
   fi
 }
 
-# gourcemake: Make a gource video in the current directory, convert to x264
+# gource_make: Make a gource video in the current directory, convert to x264
 gource_make() {
   gource_options=$*
   google_cl_available=`hash google 2>/dev/null`

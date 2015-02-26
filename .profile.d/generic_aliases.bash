@@ -208,3 +208,20 @@ __screend() {
     fi
   fi
 }
+
+
+# shrinkall: $1=ext; Attempt convert all files in directory to 50% of size
+function shrinkall() {
+  OLDIFS=$IFS
+  IFS=$'\n'
+  local extension="*.$1"
+  local dirname=$PWD
+  local files=$(find ${dirname} -name "${extension}" -type f)
+
+  for f in $files; do
+    local filename=$(basename ${f})
+    echo "Processing ${f}.."
+    convert "${f}" -resize 50% "${dirname}/small-${filename}"
+  done
+  IFS=$OLDIFS
+}
