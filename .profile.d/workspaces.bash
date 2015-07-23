@@ -2,6 +2,7 @@ renv_path="/Users/ruxton/AppsByGreg/ror/"
 wrenv_path="/Users/ruxton/Work/ror/"
 penv_path="/Users/ruxton/AppsByGreg/php/"
 wpenv_path="/Users/ruxton/Work/php/"
+wpyenv_path="/Users/ruxton/Work/python/"
 waenv_path="/Users/ruxton/Work/android/"
 aenv_path="/Users/ruxton/AppsByGreg/android/"
 menv_path="/Users/ruxton/AppsByGreg/mobile/"
@@ -32,6 +33,8 @@ function senv() { cd $senv_path$@ ;}
 function goenv() { cd $goenv_path$@ ;}
 # wjenv: Change directory to Work Java dev environment
 function wjenv() { cd $wjenv_path$@ ;}
+# wpyenv: Change directory to Work Python dev environment
+function wpyenv() { cd $wpyenv_path$@ ;}
 
 # drop: Copy $1 to share through /Users/ruxton/Sites/drop/
 drop() {
@@ -105,4 +108,4 @@ function _bash_complete_dirlister() {
   fi
 }
 
-complete -F _bash_complete_dirlister wrenv renv aenv penv wpenv menv xenv waenv senv goenv wjenv
+complete -F _bash_complete_dirlister wrenv renv aenv penv wpenv menv xenv waenv senv goenv wjenv wpyenv
