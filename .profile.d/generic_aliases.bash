@@ -1,6 +1,10 @@
 # truecrypt: TrueCrypt command line
 alias truecrypt='/Applications/TrueCrypt.app/Contents/MacOS/Truecrypt --text'
 
+# shit: Run last command as sudo
+alias shit='sudo $(fc -ln | tail -n2 | head -n1)'
+alias fuck='shit'
+
 # screen: realias screen to use bash
 alias screen="screen -s -/bin/bash"
 
