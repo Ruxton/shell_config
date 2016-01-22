@@ -89,7 +89,7 @@ gco() {
 # gpushremote: push current local branch to origin
 gpushremote() {
   current_branch=`git branch | grep "*" | awk '{ print $2 }'`
-  git push origin $current_branch
+  git push -u origin $current_branch
 }
 
 # gpushsmeg: push current local branch to smeghead
@@ -286,7 +286,7 @@ gource_make() {
   rm committers.log
   rm tag.log
 
-  gource -s 0.5 -1280x720 --user-image-dir .git/avatar/ --date-format "%Y-%m-%d %H:%M:%S" --hide progress,mouse,filenames --caption-file captions.log --caption-duration 2.0 $gource_options -o - | ffmpeg -y -r 60 -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset slow -pix_fmt yuv420p -crf 15 -strict 2 -bf 0 $filename.mp4
+  gource -s 0.5 -1280x720 --user-image-dir .git/avatar/ --date-format "%Y-%m-%d %H:%M:%S" --hide progress,mouse,filenames --caption-file captions.log --caption-duration 2.0 $gource_options -o - | ffmpeg -y -r 60 -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset ultrafast -pix_fmt yuv420p -threads 0 -crf 1 -bf 0 $filename.mp4
   rm captions.log
 
 
