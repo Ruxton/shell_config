@@ -228,7 +228,6 @@ __gbranch_selector() {
   local branch_list=`git branch 2>/dev/null | grep -v "*"`
 
   __selector "${prompt}" "selected_branch" "${current_branch}" "${branch_list}"
-
 }
 
 # gpushbanana: Push to bananajour repo
@@ -286,7 +285,7 @@ gource_make() {
   rm committers.log
   rm tag.log
 
-  gource -s 0.5 -1280x720 --user-image-dir .git/avatar/ --date-format "%Y-%m-%d %H:%M:%S" --hide progress,mouse,filenames --caption-file captions.log --caption-duration 2.0 $gource_options -o - | ffmpeg -y -r 60 -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset ultrafast -pix_fmt yuv420p -threads 0 -crf 1 -bf 0 $filename.mp4
+  gource -s 0.5 -r 25 -1280x720 --no-vsync --user-image-dir .git/avatar/ --date-format "%Y-%m-%d %H:%M:%S" --hide progress,mouse,filenames --caption-file captions.log --multi-sampling --stop-at-end --caption-duration 2.0 $gource_options -o - | ffmpeg -y -r 25 -f image2pipe -threads 0 -vcodec ppm -i - -vcodec libx264 -preset ultrafast -pix_fmt yuv420p -threads 0 -crf 1 -bf 0 $filename.mp4
   rm captions.log
 
 
