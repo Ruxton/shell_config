@@ -15,13 +15,13 @@ source ~/.massource
 # Paths
 ##
 
-PATH=$PATH:~/bin:/phonegap/lib:/usr/local/sbin:/usr/local/share/npm/bin
+PATH=$PATH:~/bin:/phonegap/lib:/usr/local/sbin:/usr/local/share/npm/bin:/usr/local/Cellar/go/1.5.1/libexec/bin
 export PATH
 
-M2_HOME=/usr/share/maven
-export M2_HOME
+# M2_HOME=/usr/share/maven
+# export M2_HOME
 
-ANDROID_HOME=/usr/local/Cellar/android-sdk/r21.1
+ANDROID_HOME=/usr/local/Cellar/android-sdk/24.4.1_1
 export ANDROID_HOME
 
 GOPATH=~/AppsByGreg/go
