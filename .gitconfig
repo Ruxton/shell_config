@@ -1,13 +1,17 @@
 [user]
 	name = Ruxton
 	email = ruxton@thefrontiergroup.com.au
+	signingkey = 7CFAFD69
 [alias]
   lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
   clg = log --pretty=format:'%x25li %s' --date=short --no-merges
   slg = log --pretty=format:'%s' --no-merges
 [core]
 	excludesfile = /Users/ruxton/.gitignore_global
+	quotepath = false
 [color]
 	ui = auto
 [github]
 	user = ruxton
+[url "git@gitlab.thefrontiergroup.net.au:"]
+  insteadOf = https://gitlab.thefrontiergroup.net.au/
