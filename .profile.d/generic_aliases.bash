@@ -110,10 +110,13 @@ function __selector() {
 
   let count=0
 
+  OIFS=$IFS
+  IFS=$'\n'
   for sel in $selList; do
     let count++
     selections[$count-1]=$sel
   done
+  IFS=$OIFS
   if [[ $count > 0 ]]; then
     choose=0
     selSize=${#selections[@]}
@@ -121,10 +124,13 @@ function __selector() {
     while [ $choose -eq 0 ]; do
       let count=0
 
+      OIFS=$IFS
+      IFS=$'\n'
       for sel in $selList; do
         let count++
         echo "$count) $sel"
       done
+      IFS=$OIFS
 
       echo
 
@@ -141,8 +147,10 @@ function __selector() {
     done
 
     let choose--
-
-    export ${selReturn}=${selections[$choose]}
+    returnSelection=${selections[$choose]}
+    returnSelection=${returnSelection##+([[:space:]])}
+    returnSelection=${returnSelection%%+([[:space:]])}
+    export declare $selReturn="$returnSelection"
   else
     return 0
   fi
