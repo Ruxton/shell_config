@@ -58,14 +58,14 @@ git_joined_committers_caption() {
 
 # gupstream: set upstream of current branch to origin/<branch_name>
 gupstream() {
-  local current_branch=`git branch 2>/dev/null | grep "*" | awk '{ print $2 }'`
+  local current_branch=`git symbolic-ref --short HEAD`
 
   git branch --set-upstream $current_branch origin/$current_branch
 }
 
 # gremote: set a local branch to be tracked against remote origin
 gremote() {
-  current_branch=`git branch | grep "*" | awk '{ print $2 }'`
+  local current_branch=`git symbolic-ref --short HEAD`
   git branch --track $1 origin/$1
   git pull
 }
@@ -88,13 +88,13 @@ gco() {
 
 # gpushremote: push current local branch to origin
 gpushremote() {
-  current_branch=`git branch | grep "*" | awk '{ print $2 }'`
+  local current_branch=`git symbolic-ref --short HEAD`
   git push -u origin $current_branch
 }
 
 # gpushsmeg: push current local branch to smeghead
 gpushsmeg() {
-  current_branch=`git branch | grep "*" | awk '{ print $1 }'`
+  local current_branch=`git symbolic-ref --short HEAD`
   git push smeghead $current_branch
 }
 
@@ -224,7 +224,7 @@ __gbranch_selector() {
     local prompt=$1
   fi
 
-  local current_branch=`git branch 2>/dev/null | grep "*" | awk '{ print $2 }'`
+  current_branch=`git symbolic-ref --short HEAD`
   local branch_list=`git branch 2>/dev/null | grep -v "*"`
 
   __selector "${prompt}" "selected_branch" "${current_branch}" "${branch_list}"
@@ -232,7 +232,7 @@ __gbranch_selector() {
 
 # gpushbanana: Push to bananajour repo
 gpushbanana() {
-  current_branch=`git branch | grep "*" | awk '{ print $2 }'`
+  current_branch=`git symbolic-ref --short HEAD`
   git push banana $current_branch
 }
 
