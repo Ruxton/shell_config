@@ -102,10 +102,12 @@ function _bash_complete_dirlister() {
   dir=${!temp}
   COMPREPLY=()
   current="${COMP_WORDS[COMP_CWORD]}"
-  if [[ ( ${COMP_CWORD} -eq 1 ) && ${COMP_WORDS[0]} == "$cmd" ]]; then
-    dir_list=$(ls -l "$dir"|grep '^d'|awk '{ print $9 }')
-    COMPREPLY=( $(compgen -W "$dir_list" -- "${current}") )
+  if [[ ${COMP_WORDS[0]} == "$cmd" ]]; then
+    k="${#COMPREPLY[@]}"
+    for j in $( compgen -d -- "$dir$current" ); do
+      COMPREPLY[k++]=${j#$dir}/     # cut off directory
+    done
   fi
 }
 
-complete -F _bash_complete_dirlister wrenv renv aenv penv wpenv menv xenv waenv senv goenv wjenv wpyenv
+complete -o nospace -F _bash_complete_dirlister wrenv renv aenv penv wpenv menv xenv waenv senv goenv wjenv wpyenv
