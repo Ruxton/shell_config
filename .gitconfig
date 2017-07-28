@@ -1,11 +1,12 @@
 [user]
 	name = Ruxton
-	email = ruxton@thefrontiergroup.com.au
+	email = ruxton@rhythmandpoetry.net
 	signingkey = 7CFAFD69
 [alias]
-  lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
-  clg = log --pretty=format:'%x25li %s' --date=short --no-merges
-  slg = log --pretty=format:'%s' --no-merges
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+	clg = log --pretty=format:'%x25li %s' --date=short --no-merges
+	slg = log --pretty=format:'%s' --no-merges
+	activity = log --author='ruxton@rhythmandpoetry.net' --author='ruxton@iinet.net.au' --author='greg@digitalignition.net' --author='ruxton@thefrontiergroup.com.au'  --pretty=format:'{ \"commit\": \"%H\",  \"author\": \"%an <%ae>\",  \"date\": \"%ad\",  \"message\": \"%f\"}'
 [core]
 	excludesfile = /Users/ruxton/.gitignore_global
 	quotepath = false
@@ -14,4 +15,4 @@
 [github]
 	user = ruxton
 [url "git@gitlab.thefrontiergroup.net.au:"]
-  insteadOf = https://gitlab.thefrontiergroup.net.au/
+	insteadOf = https://gitlab.thefrontiergroup.net.au/
