@@ -21,12 +21,12 @@ alias scpresume="rsync --partial --progress --rsh=ssh"
 
 # authme: Copy public key to remote host SSH
 function authme {
-  ssh $1 'if [[ ! -d ~/.ssh ]]; then mkdir -p ~/.ssh/; fi; cat >>.ssh/authorized_keys; chmod 600 ~/.ssh/authorized_keys' < ~/.ssh/id_rsa.pub
+  ssh "$@" 'if [[ ! -d ~/.ssh ]]; then mkdir -p ~/.ssh/; fi; cat >>.ssh/authorized_keys; chmod 600 ~/.ssh/authorized_keys' < ~/.ssh/id_rsa.pub
 }
 
 # privme: Copy private key to remote host SSH
 function privme {
-  ssh $1 'cat >>.ssh/id_rsa' < ~/.ssh/id_rsa
+  ssh "$@" 'cat >>.ssh/id_rsa' < ~/.ssh/id_rsa
 }
 
 # remknownhost: Remove a known hosts from ssh
@@ -38,7 +38,7 @@ function remknownhost {
   sed -i -n "$LINE!p" ~/.ssh/known_hosts
 }
 
-# ssl_csr_gen: Generate SSL Certificate CSR
+# ssl_genkey: Generate SSL Certificate Key
 function ssl_genkey() {
   openssl genrsa 2048 > $1.key
 }
@@ -110,4 +110,52 @@ function ssl_sni_check() {
     echo "Server uses SNI"
     return 0
   fi
+}
+
+function ssl_generate() {
+  local domain=$1
+  local email=$2
+  local org=$3
+  local alternatives=$4
+
+  while [[ "$domain" == "" ]]; do
+    read -ep "Please enter the domain name: " domain
+  done
+
+  while [[ "$email" == "" ]]; do
+    read -ep "Please enter the email address: " email
+  done
+
+  while [[ "$org" == "" ]]; do
+    read -ep "Please enter the organisation: " org
+  done
+
+  if [[ "$alternatives" == "" ]]; then
+    read -ep "Add sub-domains? (y/n)" choice
+    if [[ $choice = [yY] ]]; then
+      while [[ "$alternatives" == "" ]]; do
+        read -ep "Enter sub-domain name(s) separated by COMMA (,): " alternatives
+      done
+    fi
+  fi
+
+  OLDIFS=$IFS
+  IFS=","
+  let count=0
+  subjectAltName=""
+  for subdomain in $alternatives; do
+    let count++
+    subjectAltName+="DNS.$count=$subdomain.$domain,"
+  done
+  IFS=$OLDIFS
+
+  echo $subjectAltName
+
+  subj="/C=AU/ST=Western Australia/L=Perth/O=$org/CN=$domain/emailAddress=$email"
+
+  if [[ "$subjectAltName" != "" ]]; then
+    subj="$subj/subjectAltName=${subjectAltName%?}"
+  fi
+
+  openssl req -new -newkey rsa:4096 -sha256 -nodes -extensions v3_req -reqexts v3_req -out $domain.csr -keyout $domain.key -subj "$subj"
 }
