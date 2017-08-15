@@ -10,6 +10,8 @@ alias screen="screen -s -/bin/bash"
 # h: Show bash history
 alias h="history | more"
 
+alias upandatom="atom ."
+
 # dirs: Show only directories in the current directory
 alias dirs="ls -al | grep '^d'"
 
