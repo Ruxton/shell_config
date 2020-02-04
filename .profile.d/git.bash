@@ -88,8 +88,14 @@ gco() {
 
 # gpushremote: push current local branch to origin
 gpushremote() {
+  if [[ "$1" == "" ]]; then
+    origin=origin
+  else
+    origin=$1
+  fi
+
   local current_branch=`git symbolic-ref --short HEAD`
-  git push -u origin $current_branch
+  git push -u $origin $current_branch
 }
 
 # gpushsmeg: push current local branch to smeghead
