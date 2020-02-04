@@ -67,8 +67,9 @@ if [ -f /usr/local/etc/bash_completion ]; then
   . /usr/local/etc/bash_completion
 fi
 
+export PATH="/usr/local/opt/openssl/bin:$PATH"
+
 ##
 # RVM
 ##
-
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
