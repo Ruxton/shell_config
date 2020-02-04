@@ -16,6 +16,11 @@ function digall() {
   dig +nocmd $1 any +multiline +noall +answer
 }
 
+# dockerenv: load docker-machine environment
+function dockerenv() {
+  eval $(docker-machine env dockerHost)
+}
+
 # scpresume: rsync over ssh with resume
 alias scpresume="rsync --partial --progress --rsh=ssh"
 
