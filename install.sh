@@ -22,10 +22,11 @@ function shell_config_usage() {
   cat <<-EOF
 $(tput bold)usage:$(tput sgr0) ./install.sh [action]
 
-install:      Installs and links configuration files (default action)
-mountprivate: Mounts the private directory, useful after you've rebooted
-uninstall:    Uninstalls and removes the configuration files
-usage:        Display this message
+install:       Installs and links configuration files (default action)
+mountprivate:  Mounts the private directory, useful after you've rebooted
+updateprivate: Updates the private directory from local -> remote
+uninstall:     Uninstalls and removes the configuration files
+usage:         Display this message
 EOF
   return 0
 }
@@ -87,6 +88,17 @@ function shell_config_mount_private() {
   $truecrypt $SHELL_CONFIG_DIR/$SHELL_CONFIG_PRIVATE_FILE $SHELL_CONFIG_PRIVATE_DIR
 }
 
+function shell_config_unmount_private() {
+  echo "Unmounting private dir from True Crypt"
+  SHELL_CONFIG_PRIVATE_DIR="$SHELL_CONFIG_DIR/private"
+
+  SHELL_CONFIG_PRIVATE_FILE=`basename $SHELL_CONFIG_PRIVATE_TCVOLUME`
+
+  $truecrypt -d $SHELL_CONFIG_DIR/$SHELL_CONFIG_PRIVATE_FILE
+}
+
+
+
 function shell_config_link_homedir() {
   local file DIR from to
   echo "$(tput bold)Linking home directory...$(tput sgr0)"
@@ -144,7 +156,15 @@ function shell_config_copy() {
     echo "$(tput setaf 1)$from does not exit, unable to copy to $to$(tput sgr0)"
     return 0
   fi
+}
 
+function shell_config_update_private() {
+  if [[ -f "${SHELL_CONFIG_DIR}/private/install.shell_config" ]]; then
+    source $SHELL_CONFIG_DIR/private/install.shell_config
+    shell_config_private_update_to_encrypted
+    shell_config_unmount_private
+    shell_config_mount_private
+  fi
 }
 
 ## Executions option, defaults to install
@@ -156,5 +176,6 @@ else
     uninstall)                shell_config_uninstall;;
     usage|help|--help|-h|/?)  shell_config_usage;;
     mountprivate)             shell_config_mount_private;;
+    updateprivate)            shell_config_update_private;;
   esac
 fi
