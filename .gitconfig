@@ -14,5 +14,3 @@
 	ui = auto
 [github]
 	user = ruxton
-[url "git@gitlab.thefrontiergroup.net.au:"]
-	insteadOf = https://gitlab.thefrontiergroup.net.au/
